@@ -10,18 +10,18 @@ import (
 )
 
 const (
-	createOrder          = "https://developer.toutiao.com/api/apps/ecpay/v1/create_order"             // 预下单
-	queryOrder           = "https://developer.toutiao.com/api/apps/ecpay/v1/query_order"              // 订单查询
-	createRefund         = "https://developer.toutiao.com/api/apps/ecpay/v1/create_refund"            // 退款
-	queryRefund          = "https://developer.toutiao.com/api/apps/ecpay/v1/query_refund"             // 退款结果查询
-	settle               = "https://developer.toutiao.com/api/apps/ecpay/v1/settle"                   // 结算
-	querySettle          = "https://developer.toutiao.com/api/apps/ecpay/v1/query_settle"             // 结算结果查询
-	unsettleAmount       = "https://developer.toutiao.com/api/apps/ecpay/v1/unsettle_amount"          // 可结算金额查询
-	createReturn         = "https://developer.toutiao.com/api/apps/ecpay/v1/create_return"            // 退分账
-	queryReturn          = "https://developer.toutiao.com/api/apps/ecpay/v1/query_return"             // 退分账结果查询
-	queryMerchantBalance = "https://developer.toutiao.com/api/apps/ecpay/saas/query_merchant_balance" // 商户余额查询
-	merchantWithdraw     = "https://developer.toutiao.com/api/apps/ecpay/saas/merchant_withdraw"      // 商户提现
-	queryWithdrawOrder   = "https://developer.toutiao.com/api/apps/ecpay/saas/query_withdraw_order"   // 提现结果查询
+	createOrder          = "/api/apps/ecpay/v1/create_order"             // 预下单
+	queryOrder           = "/api/apps/ecpay/v1/query_order"              // 订单查询
+	createRefund         = "/api/apps/ecpay/v1/create_refund"            // 退款
+	queryRefund          = "/api/apps/ecpay/v1/query_refund"             // 退款结果查询
+	settle               = "/api/apps/ecpay/v1/settle"                   // 结算
+	querySettle          = "/api/apps/ecpay/v1/query_settle"             // 结算结果查询
+	unsettleAmount       = "/api/apps/ecpay/v1/unsettle_amount"          // 可结算金额查询
+	createReturn         = "/api/apps/ecpay/v1/create_return"            // 退分账
+	queryReturn          = "/api/apps/ecpay/v1/query_return"             // 退分账结果查询
+	queryMerchantBalance = "/api/apps/ecpay/saas/query_merchant_balance" // 商户余额查询
+	merchantWithdraw     = "/api/apps/ecpay/saas/merchant_withdraw"      // 商户提现
+	queryWithdrawOrder   = "/api/apps/ecpay/saas/query_withdraw_order"   // 提现结果查询
 )
 
 // CreateOrderParams 预下单接口参数
@@ -64,7 +64,7 @@ type CreateOrderResponseData struct {
 func (d *DouYinOpenApi) CreateOrder(params CreateOrderParams) (createOrderResponse CreateOrderResponse, err error) {
 	params.AppId = d.Config.AppId
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(createOrder, params, &createOrderResponse)
+	err = d.PostJson(d.GetApiUrl(createOrder), params, &createOrderResponse)
 	if err != nil {
 		return
 	}
@@ -137,7 +137,7 @@ func (d *DouYinOpenApi) QueryOrder(outOrderNo, thirdpartyId string) (queryOrderR
 		ThirdpartyId: thirdpartyId,
 	}
 	queryParams.Sign = d.GenerateSign(queryParams)
-	err = d.PostJson(queryOrder, queryParams, &queryOrderResponse)
+	err = d.PostJson(d.GetApiUrl(queryOrder), queryParams, &queryOrderResponse)
 	if err != nil {
 		return
 	}
@@ -237,7 +237,7 @@ type CreateRefundResponse struct {
 func (d *DouYinOpenApi) CreateRefund(params CreateRefundParams) (createRefundResponse CreateRefundResponse, err error) {
 	params.AppId = d.Config.AppId
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(createRefund, params, &createRefundResponse)
+	err = d.PostJson(d.GetApiUrl(createRefund), params, &createRefundResponse)
 	if err != nil {
 		return
 	}
@@ -277,7 +277,7 @@ func (d *DouYinOpenApi) QueryRefund(outRefundNo, thirdpartyId string) (queryRefu
 		ThirdpartyId: thirdpartyId,
 	}
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(queryRefund, params, &queryRefundParamsResponse)
+	err = d.PostJson(d.GetApiUrl(queryRefund), params, &queryRefundParamsResponse)
 	if err != nil {
 		return
 	}
@@ -371,7 +371,7 @@ func (d *DouYinOpenApi) Settle(settleParams SettleParams, settleParamsItem ...Se
 	settleItem, _ := json.Marshal(settleParamsItem)
 	settleParams.SettleParams = string(settleItem)
 	settleParams.Sign = d.GenerateSign(settleParams)
-	err = d.PostJson(settle, settleParams, &settleResponse)
+	err = d.PostJson(d.GetApiUrl(settle), settleParams, &settleResponse)
 	if err != nil {
 		return
 	}
@@ -415,7 +415,7 @@ func (d *DouYinOpenApi) QuerySettle(outSettleNo, thirdpartyId string) (querySett
 		ThirdpartyId: thirdpartyId,
 	}
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(querySettle, params, &querySettleResponse)
+	err = d.PostJson(d.GetApiUrl(querySettle), params, &querySettleResponse)
 	if err != nil {
 		return
 	}
@@ -521,7 +521,7 @@ func (d *DouYinOpenApi) UnsettleAmount(outOrderNo, thirdpartyId, outItemOrderNo 
 		OutItemOrderNo: outItemOrderNo,
 	}
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(unsettleAmount, params, &unsettleAmountResponse)
+	err = d.PostJson(d.GetApiUrl(unsettleAmount), params, &unsettleAmountResponse)
 	if err != nil {
 		return
 	}
@@ -569,7 +569,7 @@ type CreateReturnResponse struct {
 func (d *DouYinOpenApi) CreateReturn(params CreateReturnParams) (createReturnResponse CreateReturnResponse, err error) {
 	params.AppId = d.Config.AppId
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(createReturn, params, &createReturnResponse)
+	err = d.PostJson(d.GetApiUrl(createReturn), params, &createReturnResponse)
 	if err != nil {
 		return
 	}
@@ -618,7 +618,7 @@ func (d *DouYinOpenApi) QueryReturn(returnNo, outReturnNo, thirdpartyId string) 
 		ThirdpartyId: thirdpartyId,
 	}
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(queryReturn, params, &queryReturnResponse)
+	err = d.PostJson(d.GetApiUrl(queryReturn), params, &queryReturnResponse)
 	if err != nil {
 		return
 	}
@@ -660,7 +660,7 @@ type QueryMerchantBalanceResponse struct {
 func (d *DouYinOpenApi) QueryMerchantBalance(params QueryMerchantBalanceParams) (queryMerchantBalanceResponse QueryMerchantBalanceResponse, err error) {
 	params.AppId = d.Config.AppId
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(queryMerchantBalance, params, &queryMerchantBalanceResponse)
+	err = d.PostJson(d.GetApiUrl(queryMerchantBalance), params, &queryMerchantBalanceResponse)
 	if err != nil {
 		return
 	}
@@ -696,7 +696,7 @@ type MerchantWithdrawResponse struct {
 func (d *DouYinOpenApi) MerchantWithdraw(params MerchantWithdrawParams) (merchantWithdrawResponse MerchantWithdrawResponse, err error) {
 	params.AppId = d.Config.AppId
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(merchantWithdraw, params, &merchantWithdrawResponse)
+	err = d.PostJson(d.GetApiUrl(merchantWithdraw), params, &merchantWithdrawResponse)
 	if err != nil {
 		return
 	}
@@ -728,7 +728,7 @@ type QueryWithdrawOrderResponse struct {
 func (d *DouYinOpenApi) QueryWithdrawOrder(params QueryWithdrawOrderParams) (queryWithdrawOrderResponse QueryWithdrawOrderResponse, err error) {
 	params.AppId = d.Config.AppId
 	params.Sign = d.GenerateSign(params)
-	err = d.PostJson(queryWithdrawOrder, params, &queryWithdrawOrderResponse)
+	err = d.PostJson(d.GetApiUrl(queryWithdrawOrder), params, &queryWithdrawOrderResponse)
 	if err != nil {
 		return
 	}
