@@ -1,9 +1,6 @@
 package douyin_openapi
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	accessToken "github.com/38888/douyin-openapi/access-token"
@@ -106,35 +103,4 @@ func (d *DouYinOpenApi) Code2Session(code, anonymousCode string) (code2SessionRe
 		return code2SessionResponse, fmt.Errorf("小程序登录错误: %s %d", code2SessionResponse.ErrTips, code2SessionResponse.ErrNo)
 	}
 	return
-}
-
-type UserInfo struct {
-	AvatarUrl string    `json:"avatarUrl"`
-	NickName  string    `json:"nickName"`
-	Gender    int64     `json:"gender"`
-	City      string    `json:"city"`
-	Province  string    `json:"province"`
-	Country   string    `json:"country"`
-	Language  string    `json:"language"`
-	Watermark Watermark `json:"watermark"`
-}
-type Watermark struct {
-	Appid     string `json:"appid"`
-	Timestamp int64  `json:"timestamp"`
-}
-
-func (d *DouYinOpenApi) Decrypt(encryptedData, sessionKey, iv string) *UserInfo {
-	src, _ := base64.StdEncoding.DecodeString(encryptedData)
-	_key, _ := base64.StdEncoding.DecodeString(sessionKey)
-	_iv, _ := base64.StdEncoding.DecodeString(iv)
-
-	block, _ := aes.NewCipher(_key)
-	mode := cipher.NewCBCDecrypter(block, _iv)
-	dst := make([]byte, len(src))
-	mode.CryptBlocks(dst, src)
-	var p UserInfo
-	if err := json.Unmarshal(dst, &p); err != nil {
-		return nil
-	}
-	return &p
 }
