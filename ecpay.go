@@ -184,31 +184,24 @@ func (d *DouYinOpenApi) CheckResponseSign(oldSign string, strArr []string) error
 }
 
 // PayCallback 支付结果回调
-func (d *DouYinOpenApi) PayCallback(body string, checkSign bool) (payCallbackResponse PayCallbackResponse, err error) {
-	// 解析数据
-	err = json.Unmarshal([]byte(body), &payCallbackResponse)
-	if err != nil {
-		return
-	}
+func (d *DouYinOpenApi) PayCallback(body PayCallbackResponse, checkSign bool) (PayCallbackResponseData PayCallbackResponseData, err error) {
 	// 判断是否需要校验签名
 	if checkSign {
 		sortedString := make([]string, 0)
 		sortedString = append(sortedString, d.Config.Token)
-		sortedString = append(sortedString, payCallbackResponse.Timestamp)
-		sortedString = append(sortedString, payCallbackResponse.Nonce)
-		sortedString = append(sortedString, payCallbackResponse.Msg)
-		err = d.CheckResponseSign(payCallbackResponse.MsgSignature, sortedString)
+		sortedString = append(sortedString, body.Timestamp)
+		sortedString = append(sortedString, body.Nonce)
+		sortedString = append(sortedString, body.Msg)
+		err = d.CheckResponseSign(body.MsgSignature, sortedString)
 		if err != nil {
 			return
 		}
 	}
-	var msgStruct PayCallbackResponseData
 	// 解析 msg 数据到结构体
-	err = json.Unmarshal([]byte(payCallbackResponse.Msg), &msgStruct)
+	err = json.Unmarshal([]byte(body.Msg), &PayCallbackResponseData)
 	if err != nil {
 		return
 	}
-	payCallbackResponse.MsgStruct = msgStruct
 	return
 }
 
