@@ -116,6 +116,7 @@ type QueryOrderResponse struct {
 	OutOrderNo  string      `json:"out_order_no,omitempty"`
 	OrderId     string      `json:"order_id,omitempty"`
 	PaymentInfo PaymentInfo `json:"payment_info,omitempty"`
+	CpsInfo     CpsInfo     `json:"cps_info,omitempty"`
 }
 
 type PaymentInfo struct {
@@ -127,6 +128,11 @@ type PaymentInfo struct {
 	SellerUid   string `json:"seller_uid,omitempty"`
 	ItemId      string `json:"item_id,omitempty"`
 	CpsInfo     string `json:"cps_info,omitempty"`
+}
+type CpsInfo struct {
+	TotalFee string `json:"share_amount,omitempty"` //达人分佣金额，单位为分
+	DouyinId string `json:"douyin_id,omitempty"`    //达人抖音号
+	Nickname string `json:"nickname,omitempty"`     //达人昵称
 }
 
 // QueryOrder 支付结果查询
