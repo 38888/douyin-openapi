@@ -163,11 +163,13 @@ type PayCallbackResponseData struct {
 	CpExtra        string `json:"cp_extra,omitempty"`
 	Way            string `json:"way,omitempty"`
 	PaymentOrderNo string `json:"payment_order_no,omitempty"`
+	ChannelNo      string `json:"channel_no,omitempty"`
 	TotalAmount    int    `json:"total_amount,omitempty"`
-	Status         string `json:"status,omitempty"`
-	SellerUid      string `json:"seller_uid,omitempty"`
 	Extra          string `json:"extra,omitempty"`
+	Status         string `json:"status,omitempty"`
 	ItemId         string `json:"item_id,omitempty"`
+	SellerUid      string `json:"seller_uid,omitempty"`
+	PaidAt         string `json:"paid_at,omitempty"`
 	OrderId        string `json:"order_id,omitempty"`
 }
 
