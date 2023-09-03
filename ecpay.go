@@ -175,7 +175,7 @@ type PayCallbackResponseData struct {
 	Status         string `json:"status,omitempty"`
 	ItemId         string `json:"item_id,omitempty"`
 	SellerUid      string `json:"seller_uid,omitempty"`
-	PaidAt         string `json:"paid_at,omitempty"`
+	PaidAt         int64  `json:"paid_at,omitempty"`
 	OrderId        string `json:"order_id,omitempty"`
 }
 
