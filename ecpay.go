@@ -116,7 +116,8 @@ type QueryOrderResponse struct {
 	OutOrderNo  string      `json:"out_order_no,omitempty"`
 	OrderId     string      `json:"order_id,omitempty"`
 	PaymentInfo PaymentInfo `json:"payment_info,omitempty"`
-	CpsInfo     CpsInfo     `json:"cps_info,omitempty"`
+	CpsInfo     string      `json:"cps_info,omitempty"`
+	//CpsInfo     CpsInfo     `json:"cps_info,omitempty"`
 }
 
 type PaymentInfo struct {
