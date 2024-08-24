@@ -3,7 +3,7 @@ package douyin_openapi
 import "fmt"
 
 const (
-	orderV2Push = "https://developer.toutiao.com/api/apps/order/v2/push" // 订单推送
+	orderV2Push = "/api/apps/order/v2/push" // 订单推送
 )
 
 // OrderV2PushParams 订单推送
@@ -63,7 +63,7 @@ type OrderV2PushResponse struct {
 func (d *DouYinOpenApi) OrderV2Push(normal OrderV2PushParams) (orderV2PushResponse OrderV2PushResponse, err error) {
 	// normal.AppId = d.Config.AppId
 	// normal.Sign = d.GenerateSign(params)
-	err = d.PostJson(orderV2Push, normal, &orderV2PushResponse)
+	err = d.PostJson(d.GetApiUrl(orderV2Push), normal, &orderV2PushResponse)
 	if err != nil {
 		return
 	}
